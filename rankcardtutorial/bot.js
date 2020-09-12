@@ -3,6 +3,7 @@ const client = new Discord.Client()
 const db = require("quick.db")
 const canvacord = require("canvacord")
 const { MessageAttachment } = require("discord.js")
+const { MessageEmbed } = require("discord.js")
 client.on("ready", () => {
   console.log(`Bot has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds. | Made by lebyy`);
   client.user.setActivity(`Serving ${client.guilds.cache.size} servers`);
