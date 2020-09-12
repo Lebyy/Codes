@@ -4,6 +4,7 @@ const db = require("quick.db")
 const canvacord = require("canvacord")
 const { MessageAttachment } = require("discord.js")
 const { MessageEmbed } = require("discord.js")
+const config = require('./config.json')
 client.on("ready", () => {
   console.log(`Bot has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds. | Made by lebyy`);
   client.user.setActivity(`Serving ${client.guilds.cache.size} servers`);
@@ -41,7 +42,7 @@ client.on("message", async message => {
   let user =
     message.mentions.users.first() ||
     client.users.cache.get(args[0]) ||
-    match(args.join(" ").toLowerCase(), message.guild) ||
+   // match(args.join(" ").toLowerCase(), message.guild) ||
     message.author;
 
   let level = db.get(`level_${message.guild.id}_${user.id}`) || 0;
