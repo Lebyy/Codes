@@ -9,32 +9,14 @@ client.on("ready", () => {
   console.log(`Bot has started, with ${client.users.cache.size} users, in ${client.channels.cache.size} channels of ${client.guilds.cache.size} guilds. | Made by lebyy`);
   client.user.setActivity(`Serving ${client.guilds.cache.size} servers`);
 });
-client.on("message", message =>{
-if (!message.guild || message.author.bot) return;
-xp(message)
-})
-function xp(message) {
-	client.cooldown = new Discord.Collection();
-    if (!client.cooldown.has(`${message.author.id}`) || !(Date.now() - client.cooldown.get(`${message.author.id}`) > client.config.cooldown)) {
-        let xp = db.add(`xp_${message.guild.id}_${message.author.id}`, 1);
-        let level = Math.floor(0.3 * Math.sqrt(xp));
-        let lvl = db.get(`level_${message.guild.id}_${message.author.id}`) || db.set(`level_${message.guild.id}_${message.author.id}`,1);;
-        if (level > lvl) {
-            let newLevel = db.set(`level_${message.guild.id}_${message.author.id}`,level);
-            message.channel.send(`:tada: ${message.author.toString()}, You just advanced to level ${newLevel}!`).then(message => {
-    message.delete({ timeout: 4000 })
-  })
-  .catch(console.error);
-        }
-        client.cooldown.set(`${message.author.id}`, Date.now());
-    }
-}
 
 client.on("message", async message => {
-  if(message.author.bot) return;
+  if(!message.guild || message.author.bot) return;
   
   if(!message.content.startsWith(config.prefix)) return;
-  
+
+  xp(message);
+
   const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
    
@@ -100,4 +82,21 @@ client.on("message", async message => {
     return message.channel.send(embed);
  }
 })
+
+function xp(message) {
+	client.cooldown = new Discord.Collection();
+    if (!client.cooldown.has(`${message.author.id}`) || !(Date.now() - client.cooldown.get(`${message.author.id}`) > client.config.cooldown)) {
+        let xp = db.add(`xp_${message.guild.id}_${message.author.id}`, 1);
+        let level = Math.floor(0.3 * Math.sqrt(xp));
+        let lvl = db.get(`level_${message.guild.id}_${message.author.id}`) || db.set(`level_${message.guild.id}_${message.author.id}`,1);;
+        if (level > lvl) {
+            let newLevel = db.set(`level_${message.guild.id}_${message.author.id}`,level);
+            message.channel.send(`:tada: ${message.author.toString()}, You just advanced to level ${newLevel}!`).then(message => {
+    message.delete({ timeout: 4000 })
+  })
+  .catch(console.error);
+        }
+        client.cooldown.set(`${message.author.id}`, Date.now());
+    }
+}
 client.login("TOKEN");
