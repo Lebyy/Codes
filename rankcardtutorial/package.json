@@ -13,8 +13,8 @@
   "author": "lebyy_dev",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^12.3.1",
+    "discord.js": "^12.5.1",
     "quick.db": "7.1.1",
-    "canvacord": "^4.0.0"
+    "canvacord": "^5.0.8"
   }
 }
