@@ -28,27 +28,29 @@ client.on("message", async message => {
     message.author;
 
   let level = db.get(`level_${message.guild.id}_${user.id}`) || 0;
-  level = level.toString();
   let exp = db.get(`xp_${message.guild.id}_${user.id}`) || 0;
   let neededXP = Math.floor(Math.pow(level / 0.1, 2));
 
   let data = db.all().filter(i => i.ID.startsWith(`xp_${message.guild.id}`)).sort((a, b) => b.data - a.data);
- let rank = data.map(m => m.ID).indexOf(`xp_${message.guild.id}_${user.id}`) + 1
- rank = rank.toString();
-  let img = await canvacord.rank({
-    username: user.username,
-    discrim: user.discriminator,
-    currentXP: exp.toString(),
-    neededXP: neededXP.toString(),
-    status: user.presence.status,
-    rank,
-    level,
-    avatarURL: user.displayAvatarURL({ format: "png" })
-  //  background: "https://images.unsplash.com/photo-1523821741446-edb2b68bb7a0?ixlib=rb-1.2.1&w=1000&q=80"
-  });
-  return message.channel.send(new MessageAttachment(img, "rank.png"));
-}
+  let rank = data.map(m => m.ID).indexOf(`xp_${message.guild.id}_${user.id}`) + 1
+ const rank1 = new canvacord.Rank()
+    .setAvatar(user.displayAvatarURL({ format: "png" }))
+    .setCurrentXP(exp)
+    .setRequiredXP(neededXP)
+    .setStatus(user.presence.status)
+    .setProgressBar(["#FF0000", "#0000FF"], "GRADIENT")
+    .setUsername(user.username)
+    .setLevel(level)
+    .setRank(rank)
+    .setDiscriminator(user.discriminator);
 
+rank1.build()
+    .then(data => {
+        const attachment = new Discord.MessageAttachment(data, "RankCard.png");
+        message.channel.send(attachment);
+    });
+ }
+ };
  if(command === "leaderboard") {
     let data = db.all().filter(i => i.ID.startsWith(`xp_${message.guild.id}`)).sort((a, b) => b.data - a.data);
     if (data.length < 1) return message.channel.send("No leaderboard");
