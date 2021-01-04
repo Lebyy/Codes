@@ -50,7 +50,6 @@ rank1.build()
         message.channel.send(attachment);
     });
  }
- };
  if(command === "leaderboard") {
     let data = db.all().filter(i => i.ID.startsWith(`xp_${message.guild.id}`)).sort((a, b) => b.data - a.data);
     if (data.length < 1) return message.channel.send("No leaderboard");
