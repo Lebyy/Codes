@@ -12,11 +12,8 @@ client.on("ready", () => {
 
 client.on("message", async message => {
   if(!message.guild || message.author.bot) return;
-  
-  if(!message.content.startsWith(config.prefix)) return;
-
   xp(message);
-
+  if(!message.content.startsWith(config.prefix)) return;
   const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
    
